@@ -15,6 +15,14 @@ get '/' => sub {
 	);
 };
 
+app->config(
+	hypnotaod => {
+		listen   => ['http://127.0.0.1:3000'],
+		pid_file => '/tmp/commanding.pid',
+		workers  => 4,
+	},
+);
+
 app->start;
 
 __DATA__
