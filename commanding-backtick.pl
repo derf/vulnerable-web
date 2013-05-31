@@ -11,14 +11,14 @@ get '/' => sub {
 	$self->render(
 		'main',
 		code => $code,
-		result => q{} . qx{$code},
+		result => q{} . qx{echo "$code" > /tmp/discard},
 	);
 };
 
 app->config(
 	hypnotoad => {
 		listen   => ['http://*:3000'],
-		pid_file => '/tmp/commanding.pid',
+		pid_file => '/tmp/commanding-bt.pid',
 		workers  => 4,
 	},
 );
