@@ -43,6 +43,14 @@ any '/get/:file' => sub {
 
 $ENV{MOJO_MAX_MESSAGE_SIZE} = 52428800;
 
+app->config(
+	hypnotoad => {
+		listen   => ['http://*:3000'],
+		pid_file => '/tmp/commanding.pid',
+		workers  => 4,
+	},
+);
+
 app->start;
 
 __DATA__
