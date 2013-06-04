@@ -9,21 +9,21 @@ my $cache = '/tmp/vuln-upload';
 post '/ok' => sub {
 	my ($self) = @_;
 
-	if (my $upload = $self->req->upload('file')) {
+	if ( my $upload = $self->req->upload('file') ) {
 		my $name = $upload->filename;
 
-		if (not -d $cache) {
+		if ( not -d $cache ) {
 			mkdir($cache);
 		}
 		$upload->move_to("${cache}/${name}");
 
 		# try really hard to be exploitable
-		chmod(0755, "${cache}/${name}");
+		chmod( 0755, "${cache}/${name}" );
 
 		# FIXME don't hardcode host and port
 		$self->stash(
 			filename => $name,
-			url => "http://127.0.0.1:3000/get/${name}",
+			url      => "http://127.0.0.1:3000/get/${name}",
 		);
 	}
 	else {
@@ -31,13 +31,13 @@ post '/ok' => sub {
 	}
 };
 
-any '/' => 'forbidden';
-any '/add' => 'form';
+any '/'          => 'forbidden';
+any '/add'       => 'form';
 any '/get/:file' => sub {
 	my ($self) = @_;
 	my $file = $self->stash('file');
 
-	$self->render(text => q{result: } . qx{$cache/$file});
+	$self->render( text => q{result: } . qx{$cache/$file} );
 
 };
 

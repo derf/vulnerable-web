@@ -9,10 +9,8 @@ get '/' => sub {
 	my ($self) = @_;
 	my $site = $self->param('site');
 
-	$self->render(
-		'main',
-		source => slurp($site, err_mode => 'quiet') // q{},
-	);
+	$self->render( 'main',
+		source => slurp( $site, err_mode => 'quiet' ) // q{}, );
 };
 
 app->config(

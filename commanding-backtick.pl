@@ -10,7 +10,7 @@ get '/' => sub {
 
 	$self->render(
 		'main',
-		code => $code,
+		code   => $code,
 		result => q{} . qx{echo "$code" > /tmp/discard},
 	);
 };
