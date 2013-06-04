@@ -23,7 +23,7 @@ post '/ok' => sub {
 		# FIXME don't hardcode host and port
 		$self->stash(
 			filename => $name,
-			url => "http://127.0.0.1:3000/get/${name}",
+			url => "http://127.0.0.1:3001/get/${name}",
 		);
 	}
 	else {
@@ -31,7 +31,7 @@ post '/ok' => sub {
 	}
 };
 
-any '/' => 'forbidden';
+any '/' => 'landing';
 any '/add' => 'form';
 any '/get/:file' => sub {
 	my ($self) = @_;
@@ -46,7 +46,7 @@ $ENV{MOJO_MAX_MESSAGE_SIZE} = 52428800;
 app->config(
 	hypnotoad => {
 		listen   => ['http://*:3000'],
-		pid_file => '/tmp/commanding.pid',
+		pid_file => '/tmp/upload-exec.pid',
 		workers  => 4,
 	},
 );
@@ -57,13 +57,13 @@ __DATA__
 
 @@ form.html.ep
 <!doctype html><html>
-<head><title>Upload</title></head>
+<head><title>Upload</title>
+<meta charset="UTF-8"></head>
 <body>
 <div>
-%= form_for ok =>
-	(method => 'post', enctype => 'multipart/form-data') => begin %>
-%= file_field 'file'
-%= submit_button 'Upload'
+%= form_for ok => (method => 'post', enctype => 'multipart/form-data') => begin
+%= file_field 'file';
+%= submit_button 'Upload';
 % end
 </div>
 </body>
@@ -71,7 +71,7 @@ __DATA__
 
 @@ ok.html.ep
 <!doctype html><html>
-<head><title>OK</title></head>
+<head><title>OK</title><meta charset="UTF-8"></head>
 <body>
 <div>
 <p>
@@ -80,6 +80,21 @@ OK Upload <%= $filename %>
 <p>
 The file is now available as
 <a href="<%= $url %>"><%= $url %></a>
+</p>
+</div>
+</body>
+</html>
+
+@@ landing.html.ep
+<!doctype html><html>
+<head><title>Wide Open Uploader</title><meta charset="UTF-8"></head>
+<body>
+<div>
+<p>
+Welcome to an insecure web application
+</p>
+<p>
+Hello w3af, try <a href="/add">adding a file</a>.
 </p>
 </div>
 </body>
